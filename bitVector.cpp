@@ -12,10 +12,12 @@ VecBit::VecBit(const size_t size, bool value)
     m_arr = new int[m_size];
     m_arr[size] = value;
 }
+
 VecBit::~VecBit()
 {
     delete[] m_arr;
 }
+
 VecBit::VecBit(VecBit&& other)
 {
     if (this->m_arr == other.m_arr)
@@ -27,6 +29,7 @@ VecBit::VecBit(VecBit&& other)
     other.m_arr = nullptr;
     other.m_size = 0;
 }
+
 VecBit::VecBit(const VecBit& rhs)
 {
     if (this->m_arr == rhs.m_arr)
@@ -49,6 +52,7 @@ std::ostream& operator <<(std::ostream &out, const VecBit& v)
     }
     return out;
 }
+
 std::size_t VecBit::operator[] (std::size_t i) 
 {
     if (i >= m_size)
@@ -57,6 +61,7 @@ std::size_t VecBit::operator[] (std::size_t i)
     }
     return m_arr[i];
 }
+
 int VecBit::get(const size_t index) 
 {
     if (index >= m_size)
@@ -65,6 +70,7 @@ int VecBit::get(const size_t index)
     }
     return m_arr[index];
 }
+
 void VecBit::set(const size_t size, const bool value)
 {
     if (resize(size))
@@ -74,6 +80,7 @@ void VecBit::set(const size_t size, const bool value)
     }
     m_arr[size] = value;   
 }
+
 bool VecBit::resize(const size_t size)
 {
     if (size >= m_size)
@@ -91,6 +98,7 @@ bool VecBit::resize(const size_t size)
     }
     return false;
 }
+
 size_t VecBit::size() const
 {
     return m_size;
