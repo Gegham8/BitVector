@@ -1,4 +1,4 @@
-#include "vecBool.h"
+#include "bitVector.h"
 
 BitVector::BitVector() 
 : m_size{1}
