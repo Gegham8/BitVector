@@ -21,8 +21,12 @@ void BitVector::set(const int position, const bool value) {
         this->resize(position);
     }
     int ind = position / sizeof(int) * 8;
-    int pos = position - (ind * (sizeof(int) * 8));
-    m_arr[ind] |= (1 << pos);
+    int pos = ((ind + 1) * sizeof(int) * 8) - position;
+    if (value) {
+        m_arr[ind] |= (value << pos);
+    }
+    else {
+        m_arr[ind] &= ~(1 << pos);
 }
 
 bool BitVector::get(const int position) {
