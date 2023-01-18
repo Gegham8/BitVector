@@ -2,5 +2,5 @@
 
 int main()
 {
-    VecBit vec; 
+    BitVector bitvector;
 }
