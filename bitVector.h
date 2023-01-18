@@ -1,22 +1,25 @@
 #ifndef BIT
 #define BIT
 #include <iostream>
-class VecBit
-{
+#include <execution>
+
+class BitVector {
 public:
-    VecBit();
-    ~VecBit();
-    VecBit(const size_t, bool);
-    VecBit(const VecBit&);
-    VecBit(VecBit&&);
-    void set(const size_t, const bool);
-    int get(const size_t);
-    size_t size() const;
-    friend  std::ostream& operator << (std::ostream &out, const VecBit&);
-    std::size_t operator[] (const size_t);
+    BitVector();
+    BitVector(const int);
+    ~BitVector();
+
+public:
+    void set(const int, const bool val = true);
+    bool get(const int);
+    const int size() const;
+    void clear();
+    
 private:
-    bool resize(const size_t);
+    void resize(const int);
+
+private:
     int* m_arr;
-    size_t m_size;
+    int m_size;
 };
 #endif // BIT
