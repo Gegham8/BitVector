@@ -1,105 +1,55 @@
 #include "vecBool.h"
 
-VecBit::VecBit()
+BitVector::BitVector() 
+: m_size{1}
 {
-    m_size = 1;
-    m_arr = new int[m_size];
+    this->m_arr = new int[m_size];
 }
 
-VecBit::VecBit(const size_t size, bool value)
+BitVector::BitVector(const int size)
+: m_size{size}
 {
-    m_size = size + 1;
-    m_arr = new int[m_size];
-    m_arr[size] = value;
+    this->m_arr = new int[m_size];
 }
 
-VecBit::~VecBit()
-{
-    delete[] m_arr;
+BitVector::~BitVector() {
+    this->clear();
 }
 
-VecBit::VecBit(VecBit&& other)
-{
-    if (this->m_arr == other.m_arr)
-    {
-        return;
+void BitVector::set(const int position, const bool value) {
+    if (position >= m_size * sizeof(int) * 8) {
+        this->resize(position);
     }
-    this->m_size = other.m_size;
-    this->m_arr = other.m_arr;
-    other.m_arr = nullptr;
-    other.m_size = 0;
+    int ind = position / sizeof(int) * 8;
+    int pos = position - (ind * (sizeof(int) * 8));
+    m_arr[ind] |= (1 << pos);
 }
 
-VecBit::VecBit(const VecBit& rhs)
-{
-    if (this->m_arr == rhs.m_arr)
-    {
-        return;
-    }
-    this->m_size = rhs.m_size;
-    this->m_arr = new int[this->m_size];
-    for (size_t i = 0; i < rhs.m_size; ++i)
-    {
-        this->m_arr[i] = rhs.m_arr[i];
-    }
+bool BitVector::get(const int position) {
+    int ind = position / sizeof(int) * 8;
+    int pos = position - (ind * (sizeof(int) * 8));
+    return m_arr[ind] &= (1 << pos); 
 }
 
-std::ostream& operator <<(std::ostream &out, const VecBit& v) 
-{
-    for (size_t i = 0; i < v.m_size; ++i)
-    {
-        out << v.m_arr[i] << " ";
-    }
-    return out;
+const int BitVector::size() const {
+    return this->m_size;
 }
 
-std::size_t VecBit::operator[] (std::size_t i) 
-{
-    if (i >= m_size)
-    {
-        throw std::invalid_argument("Out of range");
+void BitVector::resize(const int new_size) {
+
+    int tmp_size = (new_size / (sizeof(int) * 8));
+    int* tmp = new int[++tmp_size];
+    for (int i = 0; i < m_size; ++i) {
+        tmp[i] = m_arr[i];
     }
-    return m_arr[i];
+    this->clear();
+    m_arr = tmp;
+    tmp = nullptr;
+    this->m_size = tmp_size;
 }
 
-int VecBit::get(const size_t index) 
-{
-    if (index >= m_size)
-    {
-        throw std::invalid_argument("Out of range");
-    }
-    return m_arr[index];
-}
-
-void VecBit::set(const size_t size, const bool value)
-{
-    if (resize(size))
-    {
-        m_arr[size] = value;
-        return;   
-    }
-    m_arr[size] = value;   
-}
-
-bool VecBit::resize(const size_t size)
-{
-    if (size >= m_size)
-    {
-        int* tmp = new int[size + 1];
-        for (int i = 0; i < m_size; ++i)
-        {
-            tmp[i] = m_arr[i];
-        }
-        m_size = size + 1;
-        delete [] m_arr;
-        m_arr = tmp;
-        tmp = nullptr;
-        return true;
-    }
-    return false;
-}
-
-size_t VecBit::size() const
-{
-    return m_size;
+void BitVector::clear() {
+    delete this->m_arr;
+    this->m_arr = nullptr;
+    this->m_size = 0;
 }
